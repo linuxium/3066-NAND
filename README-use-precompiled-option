@@ -1,0 +1,47 @@
+Instructions for running Ubuntu on NAND (i.e. running Ubuntu without having to use an SD card) using pre-compiled kernels
+-------------------------------------------------------------------------------------------------------------------------
+
+I've made available my test kernels for anyone interested in trying Ubuntu on NAND.
+You will need my SD card kernel "3.0.8-linuxium-kernel.img-ubuntu-sdcard", my NAND kernel "3.0.8-linuxium-kernel.img-ubuntu-nand"
+and parameter file "parameter-linuxium-ubuntu" together with an Ubuntu root filesystem.
+
+Note that this is an old RK3066 3.0.8 kernel that I built for experimenting some time ago.
+It does support USB Ethernet adaptor (as this is what I use) but probably won't support wifi and BT as I don't need them.  Sorry.
+Up side is therefore it should work on a variety of RK3066 devices (definitely the UG802 and A200) and likely others!
+
+1.  I use the RKAndroidToolv1.35 which is available, for example, with the 2dark/Finless 1.7 UG802 ROM
+    (see here: http://www.freaktab.com/showthread.php?2632-OLD-UG802-2dark4u-Finless-custom-ROM-version-1-7)
+    so download and extract this ROM on your Windows machine together with downloading the three files documented above.
+
+2.  First you have to prepare your NAND:
+2a.   Connect your RK3066 device (with the reset button depressed) to your Windows machine and wait for the 'Found RKAndroid' message.
+2b.   Start the RKAndroidToolv1.35 application and un-check all the check-boxes except for Loader
+      and then click on 'Erase NAND (IDB)' to clean/remove existing NAND partitions.
+2c.   Now select 'parameter-linuxium-ubuntu' for your parameter file and select its corresponding check-box on the left.
+      You will notice that the addresses will change.
+2d.   Next select '3.0.8-linuxium-kernel.img-ubuntu-sdcard' for your kernel file and select its corresponding check-box on the left.
+2e.   Finally select the check-box on the left of boot to include the default Android boot image.
+2f.   Then making sure you have four (4) check-boxes selected (loader, parameter, kernel and boot) go ahead and click on 'Flash ROM'.
+
+3.  The next step is to create an Ubuntu root filesystem on the device's NAND:
+3a.   Disconnect the RK3066 device, insert your SD card (with the Ubuntu root filesystem on it labelled as linuxroot) and boot the device.
+3b.   Shortly you will get the Ubuntu login screen so log in and fire up a terminal and enter 'sudo su -' to get to a root shell.
+3c.   Enter 'mkfs.ext4 /dev/mtdblock0' to create an ext4 filesystem on your NAND.
+3d.   You can now create a mount point (mkdir /mnt/ubunturfs) and mount your NAND drive (mount /dev/mtdblock0 /mnt/ubunturfs).
+3e.   Change directory to the temp directory on the SD card (cd /tmp).  You can use a pre-existing Ubuntu root filesystem or you can
+      download the clean sample Ubuntu 12.04 root filesystem "ubuntu1204-rfs.gz" file 
+      and then enter 'gunzip -d ubuntu1204-rfs.gz' which will creates a file called ubuntu1204-rfs so then
+      enter 'cd /mnt/linuxroot' followed by 'cpio -ivdum < /tmp/ubuntu1204-rfs' to create your ubuntu root filesystem on your NAND drive.
+3f.   Tidy up by entering 'cd /tmp' and 'rm ubuntu1204-rfs' and unmount your NAND drive by 'umount /mnt/linuxroot'.
+3g.   Power off your RK3066 device and remove the SD card.
+
+4.  The last step is to flash your RK3066 device with a kernel that boots from your newly created NAND drive:
+4a.   Re-connect your RK3066 device (with the reset button depressed) to your Windows machine and wait for the 'Found RKAnsroid' message.
+4b.   Un-check all the check-boxes except for Loader.
+4c.   Next select '3.0.8-linuxium-kernel.img-ubuntu-nand' for your kernel file and select its corresponding check-box on the left.
+4d.   This time make sure you only have two (2) check-boxes selected (loader and kernel) before going ahead and clicking on 'Flash ROM'. 
+
+5.  Disconnect the RK3066 device from Windows and boot the device.
+
+You should now get the Ubuntu login screen and once logged you should find a Linux partition of around 3.5GB loaded with the root filesystem.
+If you used my sample clean Ubuntu root filesystem you'll have around 1.8GB (or over 50%) free space to play with.

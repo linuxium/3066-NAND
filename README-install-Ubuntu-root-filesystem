@@ -1,0 +1,21 @@
+Instructions for installing an Ubuntu root filesystem on an SD card
+-------------------------------------------------------------------
+
+The file "ubuntu1204-rfs.gz" contains a clean sample Ubuntu 12.04 root filesystem.
+Please note it is preloaded with RK3066 3.0.8+ modules so obviously update it with your kernel modules as required.
+
+Typical installation would go alond the lines of:
+
+1. Download "ubuntu1204-rfs.gz" file say to tmp (or '/tmp').
+2. Enter 'cd /tmp' and then 'gunzip -d ubuntu1204-rfs.gz' which creates a file called ubuntu1204-rfs.
+3. Make an ext4 filesystem on your SD card, for example 'mkfs.ext4 /dev/{whatever the device is called}'.
+4. Label your new partition as linuxroot, for example 'e2label /dev/{whatever the partition is called} linuxroot'.
+5. Make a mount point for your SD card if it doesn't exist already, for example 'mkdir /mnt/linuxroot'.
+6. Mount your SD card, for example 'mount /dev/{whatever the partition is called} /mnt/linuxroot'.
+7. Change directory to your mounted SD card, for example 'cd /mnt/linuxroot'.
+8. Copy across the Ubuntu 12.04 root file filesystem, for example 'cpio -ivdum < /tmp/ubuntu1204-rfs'.
+9. Tidy up, for example 'cd /tmp; rm ubuntu1204-rfs; umount /mnt/linuxroot; cd'.
+
+This Ubuntu 12.04 root filesystem sets the hostname as LINUXIUMONE and contains one user 'linuxium' with password 'p'.
+You will probably (hopefully) want to make this more secure and add yourself as a user, set a root password (if you must).
+Also you can add useful packages like ssh and a vncserver.

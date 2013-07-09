@@ -1,0 +1,28 @@
+Instructions for compiling Ubuntu to run on NAND (i.e. running Ubuntu without having to use an SD card)
+-------------------------------------------------------------------------------------------------------
+
+1.  Split your Android image into component flash images of boot, kernel, system etc. and then unpack your boot image.
+2.  From here extract the rk30xxnand.ko kernel module (either the 3.0.8 or 3.0.36 kernel version as applicable) and build into your initramfs.
+    You can load the module as part of init just the same way Android does.
+3.  Compile your kernel against your new initramfs with the CMD_LINE pointing root to "LABEL=linuxroot" as usual.
+4.  Also compile a kernel using your new initramfs but with a CMD_LINE pointing to the NAND device you want to use for root
+    e.g. root=/dev/mtdblock{some number}.
+5.  Flash the "LABEL" kernel, boot from your SD card, and make an ext4 filesystem on your desired root mtdblock device.
+6.  Copy an Ubuntu root filesystem to the root mtdblock device.
+7.  Now flash the "NAND" device and it will boot without needing an SD card.
+
+To give yourself a large enough space to run Ubuntu, change the parameters which control the partitions on the NAND.
+You really only need a boot, kernel and Ubuntu partition as a miniumum.
+Make sure however you give sufficient space to the kernel partition rather than using the default Android ones as when you
+reflash your kernel image you don't want it to corrupt your NAND partition by bleeding into it due to size issues.
+
+If you don't want to bother with steps 1&2 "initramfs-mtdblock.cpio" is a test 3.0.8 initramfs
+and "parameter-linuxium-ubuntu" is a sample parameter file for repartitioning your NAND.
+
+If you just want the rk30xxnand.ko kernel modules then the 3.0.8 one is "rk30xxnand_ko.ko.3.0.8+"
+and the 3.0.36 one is "rk30xxnand_ko.ko.3.0.36+".
+
+For step 3 "3.0.8-linuxium-config-ubuntu-sdcard" is an example 3.0.8 SD card kernel config
+and for step 4 "3.0.8-linuxium-config-ubuntu-nand" is an example 3.0.8 NAND kernel config.
+
+An example Ubuntu root filesystem is "ubuntu1204-rfs.gz" - see "README-install-Ubuntu-root-filesystem" for further details.
