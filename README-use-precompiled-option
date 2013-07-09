@@ -29,7 +29,8 @@ Up side is therefore it should work on a variety of RK3066 devices (definitely t
 3c.   Enter 'mkfs.ext4 /dev/mtdblock0' to create an ext4 filesystem on your NAND.
 3d.   You can now create a mount point (mkdir /mnt/ubunturfs) and mount your NAND drive (mount /dev/mtdblock0 /mnt/ubunturfs).
 3e.   Change directory to the temp directory on the SD card (cd /tmp).  You can use a pre-existing Ubuntu root filesystem or you can
-      download the clean sample Ubuntu 12.04 root filesystem "ubuntu1204-rfs.gz" file 
+      download the clean sample Ubuntu 12.04 root filesystem "ubuntu1204-rfs.gz" file
+      from https://docs.google.com/file/d/0B99O3A0dDe67eXYza2dMb28waHM/edit?usp=sharing
       and then enter 'gunzip -d ubuntu1204-rfs.gz' which will creates a file called ubuntu1204-rfs so then
       enter 'cd /mnt/linuxroot' followed by 'cpio -ivdum < /tmp/ubuntu1204-rfs' to create your ubuntu root filesystem on your NAND drive.
 3f.   Tidy up by entering 'cd /tmp' and 'rm ubuntu1204-rfs' and unmount your NAND drive by 'umount /mnt/linuxroot'.

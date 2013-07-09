@@ -2,6 +2,7 @@ Instructions for installing an Ubuntu root filesystem on an SD card
 -------------------------------------------------------------------
 
 The file "ubuntu1204-rfs.gz" contains a clean sample Ubuntu 12.04 root filesystem.
+It can be downloaded from https://docs.google.com/file/d/0B99O3A0dDe67eXYza2dMb28waHM/edit?usp=sharing
 Please note it is preloaded with RK3066 3.0.8+ modules so obviously update it with your kernel modules as required.
 
 Typical installation would go alond the lines of:
